@@ -1,0 +1,2 @@
+a classic dll injector for cod4. used for slightly faster tool development as opposed to complex injectors.
+remotely creates thread in the process and calls LoadLibraryA with supplied dll as an argument.
