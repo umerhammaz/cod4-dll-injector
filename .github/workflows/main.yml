@@ -11,14 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up the MSVC compiler environment (THE REAL FIX)
-      #    This action is specifically designed to find and set up cl.exe correctly.
+      # 2. Set up the MSVC compiler environment
       - name: Setup MSVC Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
 
-      # 3. Compile the code. cl.exe will now be in the PATH.
+      # 3. Compile and link the code (THE FIX: adding User32.lib)
       - name: Compile with cl.exe
-        run: cl.exe /O2 /EHsc main.cpp /Fe:DLL_INJECTOR.exe
+        run: cl.exe /O2 /EHsc main.cpp User32.lib /Fe:DLL_INJECTOR.exe
 
       # 4. Upload the final .exe file
       - name: Upload Artifact
