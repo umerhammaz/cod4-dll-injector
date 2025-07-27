@@ -1,29 +1,32 @@
 name: Build C++ Project
 
-# This allows you to run the build manually from the Actions tab
 on: workflow_dispatch
 
 jobs:
   build:
-    # Use a Windows virtual machine to build the project
     runs-on: windows-latest
 
     steps:
       # 1. Get the code from your repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2. Set up MSBuild (the Visual Studio build tool)
+      # 2. (Optional but helpful) List files to see the directory structure
+      - name: List files in workspace
+        run: Get-ChildItem -Recurse
+
+      # 3. Set up MSBuild
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
 
-      # 3. Build the project in "Release" mode for 32-bit (x86)
+      # 4. Build the project (FIXED: added working-directory)
       - name: Build Solution
+        working-directory: ./COD4MWStoryModCheat-main # Adjust if your folder name is different
         run: msbuild.exe "codmw-internal-esp.sln" /p:Configuration=Release /p:Platform=x86
 
-      # 4. Upload the compiled file as a downloadable artifact (FIXED)
+      # 5. Upload the compiled file (FIXED: updated path)
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Built-File
-          path: x86/Release/ # The folder where the final .dll is located
+          path: COD4MWStoryModCheat-main/x86/Release/ # Path to the output folder
