@@ -1,4 +1,4 @@
-name: Build C++ Project
+name: Build C++ Executable Directly
 
 on: workflow_dispatch
 
@@ -11,17 +11,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up MSBuild (the Visual Studio build tool)
+      # 2. Set up the Developer Command Prompt environment (for cl.exe)
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
 
-      # 3. Build the solution (FIXED: Correct .sln file, no working directory)
-      - name: Build Solution
-        run: msbuild.exe "DLL_INJECTOR.sln" /p:Configuration=Release /p:Platform=x86
+      # 3. Compile main.cpp directly into an .exe (THE FIX)
+      #    We ignore the broken .sln and build from the source file.
+      - name: Compile with cl.exe
+        run: cl.exe /O2 /EHsc main.cpp /Fe:DLL_INJECTOR.exe
 
-      # 4. Upload the compiled file as a downloadable artifact (FIXED: Corrected path)
+      # 4. Upload the final .exe file
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Built-Injector
-          path: x86/Release/ 
+          path: DLL_INJECTOR.exe # The .exe is now in the root folder
