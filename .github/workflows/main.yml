@@ -11,13 +11,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up the Developer Command Prompt environment (for cl.exe)
+      # 2. Set up the Developer Command Prompt environment
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
 
-      # 3. Compile main.cpp directly into an .exe (THE FIX)
-      #    We ignore the broken .sln and build from the source file.
+      # 3. Compile main.cpp directly into an .exe
       - name: Compile with cl.exe
+        # THIS IS THE FIX: Run the command using the 'cmd' shell
+        shell: cmd
         run: cl.exe /O2 /EHsc main.cpp /Fe:DLL_INJECTOR.exe
 
       # 4. Upload the final .exe file
@@ -25,4 +26,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Built-Injector
-          path: DLL_INJECTOR.exe # The .exe is now in the root folder
+          path: DLL_INJECTOR.exe
