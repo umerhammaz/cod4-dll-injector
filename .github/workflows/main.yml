@@ -1,0 +1,29 @@
+name: Build C++ Project
+
+# This allows you to run the build manually from the Actions tab
+on: workflow_dispatch
+
+jobs:
+  build:
+    # Use a Windows virtual machine to build the project
+    runs-on: windows-latest
+
+    steps:
+      # 1. Get the code from your repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up MSBuild (the Visual Studio build tool)
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+
+      # 3. Build the project in "Release" mode for 32-bit (x86)
+      - name: Build Solution
+        run: msbuild.exe "codmw-internal-esp.sln" /p:Configuration=Release /p:Platform=x86
+
+      # 4. Upload the compiled file as a downloadable artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Built-File
+          path: x86/Release/ # The folder where the final .dll is located
