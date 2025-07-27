@@ -11,22 +11,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. (Optional but helpful) List files to see the directory structure
-      - name: List files in workspace
-        run: Get-ChildItem -Recurse
-
-      # 3. Set up MSBuild
+      # 2. Set up MSBuild (the Visual Studio build tool)
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
 
-      # 4. Build the project (FIXED: added working-directory)
+      # 3. Build the solution (FIXED: Correct .sln file, no working directory)
       - name: Build Solution
-        working-directory: ./COD4MWStoryModCheat-main # Adjust if your folder name is different
-        run: msbuild.exe "codmw-internal-esp.sln" /p:Configuration=Release /p:Platform=x86
+        run: msbuild.exe "DLL_INJECTOR.sln" /p:Configuration=Release /p:Platform=x86
 
-      # 5. Upload the compiled file (FIXED: updated path)
+      # 4. Upload the compiled file as a downloadable artifact (FIXED: Corrected path)
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Built-File
-          path: COD4MWStoryModCheat-main/x86/Release/ # Path to the output folder
+          name: Built-Injector
+          path: x86/Release/ 
