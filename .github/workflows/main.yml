@@ -11,14 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up the Developer Command Prompt environment
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
+      # 2. Set up the MSVC compiler environment (THE REAL FIX)
+      #    This action is specifically designed to find and set up cl.exe correctly.
+      - name: Setup MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
 
-      # 3. Compile main.cpp directly into an .exe
+      # 3. Compile the code. cl.exe will now be in the PATH.
       - name: Compile with cl.exe
-        # THIS IS THE FIX: Run the command using the 'cmd' shell
-        shell: cmd
         run: cl.exe /O2 /EHsc main.cpp /Fe:DLL_INJECTOR.exe
 
       # 4. Upload the final .exe file
